@@ -1,25 +1,62 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import React, { useState } from 'react';
+
+interface Products {
+  id: number;
+  name: string;
+  count: number;
+}
+const initialProducts = [
+  {
+    id: 0,
+    name: 'Baklava',
+    count: 1,
+  },
+  {
+    id: 1,
+    name: 'Cheese',
+    count: 5,
+  },
+  {
+    id: 2,
+    name: 'Spaghetti',
+    count: 2,
+  },
+];
 
 function App() {
+  const [products, setProducts] = useState<Products[]>(initialProducts);
+
+  function handleIncreaseClick(productId: number) {
+    setProducts((products) => {
+      return products.map((product) => {
+        if (product.id === productId) {
+          return {
+            ...product,
+            count: product.count + 1,
+          };
+        } else {
+          return product;
+        }
+      });
+    });
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ul>
+      {products.map((product) => (
+        <li key={product.id}>
+          {product.name} (<b>{product.count}</b>)
+          <button
+            onClick={() => {
+              handleIncreaseClick(product.id);
+            }}
+          >
+            +
+          </button>
+        </li>
+      ))}
+    </ul>
   );
 }
 
